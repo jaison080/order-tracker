@@ -1,5 +1,11 @@
 import { Button } from "@mui/material";
-import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  deleteDoc,
+  doc,
+  setDoc,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import AddModal from "../components/AddModal/AddModal";
 import EditModal from "../components/EditModal/EditModal";
@@ -26,9 +32,29 @@ function Dashboard() {
     await deleteDoc(doc(db, "orders", id));
     getOrders();
   }
+  async function completeOrder(id) {
+    await setDoc(
+      doc(db, "orders", id),
+      {
+        isCompleted: true,
+      },
+      { merge: true }
+    );
+    window.location.reload(0);
+  }
+  async function incompleteOrder(id) {
+    await setDoc(
+      doc(db, "orders", id),
+      {
+        isCompleted: false,
+      },
+      { merge: true }
+    );
+    window.location.reload(0);
+  }
   useEffect(() => {
     getOrders();
-  }, [orders]);
+  }, []);
   if (loading) {
     return <h1>Loading...</h1>;
   }
@@ -48,6 +74,16 @@ function Dashboard() {
             <p>Delivery Date : {order.delivery_date}</p>
             <p>Order Date : {order.order_date}</p>
             <p>Quantity : {order.quantity}</p>
+            {order.isCompleted ? (
+              <button onClick={() => incompleteOrder(order.id)}>
+                Mark as Incomplete
+              </button>
+            ) : (
+              <button onClick={() => completeOrder(order.id)}>
+                Mark as Completed
+              </button>
+            )}
+
             <button onClick={() => deleteOrder(order.id)}>Delete Order</button>
             <button onClick={handleOpen1}>Edit Order</button>
             <EditModal open={open1} setOpen={setOpen1} order={order} />

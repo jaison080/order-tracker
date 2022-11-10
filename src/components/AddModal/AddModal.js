@@ -37,6 +37,7 @@ export default function AddModal(props) {
       quantity: data.get("quantity"),
       delivery_date: data.get("delivery_date"),
       order_date: data.get("order_date"),
+      isCompleted: false,
     };
     AddOrder(order);
     handleClose();

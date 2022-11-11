@@ -16,6 +16,7 @@ const settings = ["Logout"];
 function Navbar() {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const router = useRouter();
+  const [signedInUser,setSignedInUser]=useState();
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -23,12 +24,12 @@ function Navbar() {
     setAnchorElUser(null);
   };
   const auth = getAuth();
-  const signedInUser = onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(auth, (user) => {
     if (user) {
-      console.log(user);
-      return user;
+     setSignedInUser(user);
     }
   });
+  console.log(signedInUser)
   function handleLogout() {
     auth.signOut().then(() => {
       router.push("/");
@@ -60,7 +61,7 @@ function Navbar() {
         <Box sx={{ flexGrow: 0 }}>
           <Tooltip>
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt="Remy Sharp" src={signedInUser.photoURL} />
+              <Avatar alt="Profile Picture" src={signedInUser?.photoURL} />
             </IconButton>
           </Tooltip>
           <Menu

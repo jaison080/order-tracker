@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import app, { db } from "../utils/firebase";
 import styles from "../styles/Login.module.css";
 import { doc, getDoc } from "firebase/firestore";
+import Head from "next/head";
 
 function Login() {
   const router = useRouter();
@@ -54,21 +55,31 @@ function Login() {
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  }, []);
   if (loading) {
     return (
-      <div className={styles.loader}>
-        <h5>Loading...</h5>
-      </div>
+      <>
+        <Head>
+          <title>Order Tracker | Login</title>
+        </Head>
+        <div className={styles.loader}>
+          <h5>Loading...</h5>
+        </div>
+      </>
     );
   } else {
     return (
-      <div className={styles.login_container}>
-        <h1>ORDER TRACKER</h1>
-        <Button onClick={signInWithGoogle} variant="contained">
-          Sign in with Google
-        </Button>
-      </div>
+      <>
+        <Head>
+          <title>Order Tracker | Login</title>
+        </Head>
+        <div className={styles.login_container}>
+          <h1>ORDER TRACKER</h1>
+          <Button onClick={signInWithGoogle} variant="contained">
+            Sign in with Google
+          </Button>
+        </div>
+      </>
     );
   }
 }

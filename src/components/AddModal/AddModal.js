@@ -1,7 +1,7 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { TextField } from "@mui/material";
+import dayjs from 'dayjs';
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
@@ -9,6 +9,9 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../utils/firebase";
+import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { useState } from "react";
 const style = {
   position: "absolute",
   top: "50%",
@@ -21,6 +24,15 @@ const style = {
 const theme = createTheme();
 
 export default function AddModal(props) {
+  const [orderDate, setOrderDate] = useState(dayjs(Date.now()));
+  const [deliveryDate, setDeliveryDate] = useState(dayjs(Date.now()));
+
+  const handleChange = (newValue) => {
+    setOrderDate(newValue);
+  };
+  const handleChange1 = (newValue) => {
+    setDeliveryDate(newValue);
+  };
   async function AddOrder(order) {
     await addDoc(collection(db, "orders"), order);
   }
@@ -34,8 +46,8 @@ export default function AddModal(props) {
       phone: data.get("phone"),
       address: data.get("address"),
       quantity: data.get("quantity"),
-      delivery_date: data.get("delivery_date"),
-      order_date: data.get("order_date"),
+      delivery_date: deliveryDate.format("DD/MM/YYYY"),
+      order_date: orderDate.format("DD/MM/YYYY"),
       isCompleted: false,
     };
     AddOrder(order).then(() => {
@@ -125,26 +137,28 @@ export default function AddModal(props) {
                       />
                     </Grid>
                     <Grid item xs={12}>
-                      <TextField
-                        required
-                        fullWidth
-                        name="delivery_date"
-                        label="Delivery Date"
-                        type="text"
-                        id="delivery_date"
-                        autoComplete="delivery_date"
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DesktopDatePicker
+                        label="Order Date"
+                        inputFormat="DD/MM/YYYY"
+                        value={orderDate}
+                        onChange={handleChange}
+                        renderInput={(params) => <TextField 
+                          fullWidth {...params} />}
                       />
+                      </LocalizationProvider>
                     </Grid>
                     <Grid item xs={12}>
-                      <TextField
-                        required
-                        fullWidth
-                        name="order_date"
-                        label="Order Date"
-                        type="text"
-                        id="order_date"
-                        autoComplete="order_date"
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DesktopDatePicker
+                        label="Delivery Date"
+                        inputFormat="DD/MM/YYYY"
+                        value={deliveryDate}
+                        onChange={handleChange1}
+                        renderInput={(params) => <TextField 
+                          fullWidth {...params} />}
                       />
+                      </LocalizationProvider>
                     </Grid>
                   </Grid>
                   <Button

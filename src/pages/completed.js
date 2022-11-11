@@ -6,22 +6,21 @@ import { useRouter } from "next/router";
 import Navbar from "../components/Navbar/Navbar";
 import { db } from "../utils/firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import Head from "next/head";
 function Completed() {
-  const [signedInUser,setSignedInUser]=useState();
+  const [signedInUser, setSignedInUser] = useState();
   const auth = getAuth();
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setSignedInUser(user);
-      }
-      else
-      {
+      } else {
         router.push("/");
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
-  
+  }, []);
+
   const router = useRouter();
   const [orders, setOrders] = useState();
   const [loading, setLoading] = useState(true);
@@ -45,14 +44,24 @@ function Completed() {
   }
   if (loading) {
     return (
-      <div className={styles.loader}>
-        <h5>Loading...</h5>
-      </div>
+      <>
+        <Head>
+          <title>Order Tracker | Completed Orders</title>
+          <meta name="viewport" content="width=1024, initial-scale=1" />
+        </Head>
+        <div className={styles.loader}>
+          <h5>Loading...</h5>
+        </div>
+      </>
     );
   }
   return (
     <>
-      <Navbar  user={signedInUser} auth={auth}/>
+      <Head>
+        <title>Order Tracker | Completed Orders</title>
+        <meta name="viewport" content="width=1024, initial-scale=1" />
+      </Head>
+      <Navbar user={signedInUser} auth={auth} />
       <div className={styles.completed_container}>
         <div className={styles.header}>
           <h1>Completed Orders</h1>

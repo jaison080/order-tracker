@@ -15,6 +15,10 @@ import { useRouter } from "next/router";
 import Navbar from "../components/Navbar/Navbar";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { db } from "../utils/firebase";
+import { FaCheck, FaEdit, FaPlus } from "react-icons/fa";
+import { ImCross } from "react-icons/im";
+import { RiDeleteBin6Fill } from "react-icons/ri";
+import Head from "next/head";
 function Dashboard() {
   const [signedInUser, setSignedInUser] = useState();
   const router = useRouter();
@@ -35,14 +39,12 @@ function Dashboard() {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setSignedInUser(user);
-      }
-      else
-      {
+      } else {
         router.push("/");
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  }, []);
   async function getOrders() {
     let temp = [];
     const querySnapshot = await getDocs(collection(db, "orders"));
@@ -88,13 +90,23 @@ function Dashboard() {
   }
   if (loading) {
     return (
-      <div className={styles.loader}>
-        <h5>Loading...</h5>
-      </div>
+      <>
+        <Head>
+          <title>Order Tracker | Dashboard</title>
+          <meta name="viewport" content="width=1024, initial-scale=1" />
+        </Head>
+        <div className={styles.loader}>
+          <h5>Loading...</h5>
+        </div>
+      </>
     );
   }
   return (
     <>
+      <Head>
+        <title>Order Tracker | Dashboard</title>
+        <meta name="viewport" content="width=1024, initial-scale=1" />
+      </Head>
       <Navbar user={signedInUser} auth={auth} />
       <div className={styles.dashboard_container}>
         <div className={styles.header}>
@@ -103,8 +115,12 @@ function Dashboard() {
             <Button onClick={completedPage} variant="contained" color="success">
               View Completed Orders
             </Button>
-            <Button onClick={handleOpen} variant="contained">
-              Add Order
+            <Button
+              onClick={handleOpen}
+              variant="contained"
+              sx={{ display: "flex", columnGap: "15px" }}
+            >
+              <FaPlus size={20} /> Add Order
             </Button>
           </div>
         </div>
@@ -144,7 +160,7 @@ function Dashboard() {
                             variant="contained"
                             color="warning"
                           >
-                            Mark as Incomplete
+                            <ImCross size={20} />
                           </Button>
                         ) : (
                           <Button
@@ -152,7 +168,7 @@ function Dashboard() {
                             variant="contained"
                             color="success"
                           >
-                            Mark as Completed
+                            <FaCheck size={20} />
                           </Button>
                         )}
 
@@ -161,7 +177,7 @@ function Dashboard() {
                           variant="contained"
                           color="error"
                         >
-                          Delete Order
+                          <RiDeleteBin6Fill size={20} />
                         </Button>
                         <Button
                           onClick={() => {
@@ -171,7 +187,7 @@ function Dashboard() {
                           variant="contained"
                           color="secondary"
                         >
-                          Edit Order
+                          <FaEdit size={20} />
                         </Button>
                       </div>
                     </td>

@@ -7,8 +7,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { addDoc, collection, doc } from "firebase/firestore";
-import db from "../../utils/firebase";
+import { addDoc, collection, getFirestore } from "firebase/firestore";
+import app from "../../utils/firebase";
 
 const style = {
   position: "absolute",
@@ -22,6 +22,7 @@ const style = {
 const theme = createTheme();
 
 export default function AddModal(props) {
+  const db=getFirestore(app);
   async function AddOrder(order) {
     await addDoc(collection(db, "orders"), order);
   }

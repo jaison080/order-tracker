@@ -25,13 +25,15 @@
 .action_buttons
 {
     display: flex;
+    width: max-content;
+    column-gap: 30px;
     justify-content: space-between;
-    align-items: center;
 }
 .header_buttons
 {
     display: flex;
     column-gap: 30px;
+    align-items: center;
 }
 .loader
 {

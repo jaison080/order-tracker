@@ -39,8 +39,10 @@ export default function AddModal(props) {
       order_date: data.get("order_date"),
       isCompleted: false,
     };
-    AddOrder(order);
-    handleClose();
+    AddOrder(order).then(() => {
+      handleClose();
+      props.settempOrders(order);
+    });
   };
 
   return (

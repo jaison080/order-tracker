@@ -8,7 +8,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import db from "../../utils/firebase";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const style = {
   position: "absolute",
@@ -21,13 +21,13 @@ const style = {
 };
 const theme = createTheme();
 export default function EditModal(props) {
-  const [name, setName] = useState(props.order.name);
-  const [email, setEmail] = useState(props.order.email);
-  const [phone, setPhone] = useState(props.order.phone);
-  const [address, setAddress] = useState(props.order.address);
-  const [quantity, setQuantity] = useState(props.order.quantity);
-  const [delivery_date, setDeliveryDate] = useState(props.order.delivery_date);
-  const [order_date, setOrderDate] = useState(props.order.order_date);
+  const [name, setName] = useState(props.order?.name);
+  const [email, setEmail] = useState(props.order?.email);
+  const [phone, setPhone] = useState(props.order?.phone);
+  const [address, setAddress] = useState(props.order?.address);
+  const [quantity, setQuantity] = useState(props.order?.quantity);
+  const [delivery_date, setDeliveryDate] = useState(props.order?.delivery_date);
+  const [order_date, setOrderDate] = useState(props.order?.order_date);
 
   async function EditOrder(order, id) {
     await setDoc(doc(db, "orders", id), order);
@@ -37,16 +37,18 @@ export default function EditModal(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
     const updateOrder = {
-      name: name,
-      email: email,
-      phone: phone,
-      address: address,
-      quantity: quantity,
-      delivery_date: delivery_date,
-      order_date: order_date,
+      name: name || props.order?.name,
+      email: email || props.order?.email,
+      phone: phone || props.order?.phone,
+      address: address || props.order?.address,
+      quantity: quantity || props.order?.quantity,
+      delivery_date: delivery_date || props.order?.delivery_date,
+      order_date: order_date || props.order?.order_date,
     };
-    EditOrder(updateOrder, props.order.id);
-    handleClose();
+    EditOrder(updateOrder, props.order.id).then(() => {
+      handleClose();
+      props.settempOrders(updateOrder);
+    });
   };
   return (
     <div>
@@ -80,7 +82,7 @@ export default function EditModal(props) {
                         fullWidth
                         id="name"
                         label="Name"
-                        value={name}
+                        value={name ? name : props.order?.name}
                         onChange={(e) => {
                           setName(e.target.value);
                         }}
@@ -93,7 +95,7 @@ export default function EditModal(props) {
                         required
                         fullWidth
                         name="email"
-                        value={email}
+                        value={email ? email : props.order?.email}
                         onChange={(e) => {
                           setEmail(e.target.value);
                         }}
@@ -106,7 +108,7 @@ export default function EditModal(props) {
                     <Grid item xs={12}>
                       <TextField
                         required
-                        value={phone}
+                        value={phone ? phone : props.order?.phone}
                         onChange={(e) => {
                           setPhone(e.target.value);
                         }}
@@ -122,7 +124,7 @@ export default function EditModal(props) {
                       <TextField
                         required
                         fullWidth
-                        value={address}
+                        value={address ? address : props.order?.address}
                         onChange={(e) => {
                           setAddress(e.target.value);
                         }}
@@ -138,7 +140,7 @@ export default function EditModal(props) {
                         required
                         fullWidth
                         name="quantity"
-                        value={quantity}
+                        value={quantity ? quantity : props.order?.quantity}
                         onChange={(e) => {
                           setQuantity(e.target.value);
                         }}
@@ -152,7 +154,11 @@ export default function EditModal(props) {
                       <TextField
                         required
                         fullWidth
-                        value={delivery_date}
+                        value={
+                          delivery_date
+                            ? delivery_date
+                            : props.order?.delivery_date
+                        }
                         onChange={(e) => {
                           setDeliveryDate(e.target.value);
                         }}
@@ -166,7 +172,9 @@ export default function EditModal(props) {
                     <Grid item xs={12}>
                       <TextField
                         required
-                        value={order_date}
+                        value={
+                          order_date ? order_date : props.order?.order_date
+                        }
                         onChange={(e) => {
                           setOrderDate(e.target.value);
                         }}

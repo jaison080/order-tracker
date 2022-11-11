@@ -12,14 +12,14 @@ import EditModal from "../components/EditModal/EditModal";
 import db from "../utils/firebase";
 function Dashboard() {
   const [orders, setOrders] = useState();
-  const [order,setOrder]=useState();
+  const [tempOrders, settempOrders] = useState();
+  const [selectedOrder, setSelectedOrder] = useState();
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleOpen1 = (order) => {
+  const handleOpen1 = () => {
     setOpen1(true);
-    setOrder(order);
   };
   async function getOrders() {
     let temp = [];
@@ -44,6 +44,7 @@ function Dashboard() {
       },
       { merge: true }
     );
+    settempOrders(id.isCompleted);
   }
   async function incompleteOrder(id) {
     await setDoc(
@@ -53,49 +54,76 @@ function Dashboard() {
       },
       { merge: true }
     );
-  }
-  function editOrder(order)
-  {
-    <EditModal open={open1} setOpen={setOpen1} order={order} />
+    settempOrders(id);
   }
   useEffect(() => {
     getOrders();
-  }, [orders]);
+  }, [tempOrders]);
   if (loading) {
     return <h1>Loading...</h1>;
   }
   return (
     <div>
       <h1>Dashboard</h1>
-      <Button onClick={handleOpen}>Add Order</Button>
-      <AddModal open={open} setOpen={setOpen} />
-      {orders.map((order, index) => {
+      <Button onClick={handleOpen} variant="contained">
+        Add Order
+      </Button>
+      <AddModal open={open} setOpen={setOpen} settempOrders={settempOrders} />
+      {orders.map((singleOrder, index) => {
         return (
           <div key={index}>
-            <h2>Order ID : {order.id}</h2>
-            <p>Customer Name : {order.name}</p>
-            <p>Phone No : {order.phone}</p>
-            <p>Email : {order.email}</p>
-            <p>Address : {order.address}</p>
-            <p>Delivery Date : {order.delivery_date}</p>
-            <p>Order Date : {order.order_date}</p>
-            <p>Quantity : {order.quantity}</p>
-            {order.isCompleted ? (
-              <button onClick={() => incompleteOrder(order.id)}>
+            <h2>Order ID : {singleOrder.id}</h2>
+            <p>Customer Name : {singleOrder.name}</p>
+            <p>Phone No : {singleOrder.phone}</p>
+            <p>Email : {singleOrder.email}</p>
+            <p>Address : {singleOrder.address}</p>
+            <p>Delivery Date : {singleOrder.delivery_date}</p>
+            <p>Order Date : {singleOrder.order_date}</p>
+            <p>Quantity : {singleOrder.quantity}</p>
+            {singleOrder.isCompleted ? (
+              <Button
+                onClick={() => incompleteOrder(singleOrder.id)}
+                variant="contained"
+                color="warning"
+              >
                 Mark as Incomplete
-              </button>
+              </Button>
             ) : (
-              <button onClick={() => completeOrder(order.id)}>
+              <Button
+                onClick={() => completeOrder(singleOrder.id)}
+                variant="contained"
+                color="success"
+              >
                 Mark as Completed
-              </button>
+              </Button>
             )}
 
-            <button onClick={() => deleteOrder(order.id)}>Delete Order</button>
-            <button onClick={()=>{handleOpen1(order)}}>Edit Order</button>
+            <Button
+              onClick={() => deleteOrder(singleOrder.id)}
+              variant="contained"
+              color="error"
+            >
+              Delete Order
+            </Button>
+            <Button
+              onClick={() => {
+                setSelectedOrder(singleOrder);
+                handleOpen1();
+              }}
+              variant="contained"
+              color="secondary"
+            >
+              Edit Order
+            </Button>
           </div>
         );
       })}
-      <EditModal open={open1} setOpen={setOpen1} order={order} />
+      <EditModal
+        open={open1}
+        setOpen={setOpen1}
+        order={selectedOrder}
+        settempOrders={settempOrders}
+      />
     </div>
   );
 }

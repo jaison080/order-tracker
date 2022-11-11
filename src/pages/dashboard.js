@@ -13,10 +13,10 @@ import EditModal from "../components/EditModal/EditModal";
 import styles from "../styles/Dashboard.module.css";
 import { useRouter } from "next/router";
 import Navbar from "../components/Navbar/Navbar";
-import app from "../utils/firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { db } from "../utils/firebase";
 function Dashboard() {
-  const db = getFirestore(app);
+  const [signedInUser, setSignedInUser] = useState();
   const router = useRouter();
   const [orders, setOrders] = useState();
   const [tempOrders, settempOrders] = useState();
@@ -24,14 +24,16 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    setOpen(true);
+  };
   const handleOpen1 = () => {
     setOpen1(true);
   };
   const auth = getAuth();
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      const signedInUser = user;
+      setSignedInUser(user);
     } else {
       router.push("/");
     }
@@ -88,7 +90,7 @@ function Dashboard() {
   }
   return (
     <>
-      <Navbar />
+      <Navbar user={signedInUser} auth={auth} />
       <div className={styles.dashboard_container}>
         <div className={styles.header}>
           <h1>Dashboard</h1>
@@ -101,7 +103,7 @@ function Dashboard() {
             </Button>
           </div>
         </div>
-        <AddModal open={open} setOpen={setOpen} settempOrders={settempOrders} />
+
         <div>
           <table className={styles.table}>
             <thead>
@@ -175,6 +177,7 @@ function Dashboard() {
             <tfoot></tfoot>
           </table>
         </div>
+        <AddModal open={open} setOpen={setOpen} settempOrders={settempOrders} />
         <EditModal
           open={open1}
           setOpen={setOpen1}

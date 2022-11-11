@@ -7,15 +7,14 @@ import {
 } from "firebase/auth";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import app from "../utils/firebase";
+import app, { db } from "../utils/firebase";
 import styles from "../styles/Login.module.css";
-import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 function Login() {
   const router = useRouter();
   const [users, setUsers] = useState();
   const [loading, setLoading] = useState(true);
-  const db = getFirestore(app);
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
   useEffect(() => {

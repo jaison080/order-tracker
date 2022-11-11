@@ -4,14 +4,14 @@ import styles from "../styles/Completed.module.css";
 import { Button } from "@mui/material";
 import { useRouter } from "next/router";
 import Navbar from "../components/Navbar/Navbar";
-import app from "../utils/firebase";
+import { db } from "../utils/firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 function Completed() {
-  const db = getFirestore(app);
+  const [signedInUser,setSignedInUser]=useState();
   const auth = getAuth();
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      const signedInUser = user;
+      setSignedInUser(user);
     }
     else
     {
@@ -48,7 +48,7 @@ function Completed() {
   }
   return (
     <>
-      <Navbar />
+      <Navbar  user={signedInUser} auth={auth}/>
       <div className={styles.completed_container}>
         <div className={styles.header}>
           <h1>Completed Orders</h1>

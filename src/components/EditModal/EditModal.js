@@ -6,9 +6,9 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { doc, getFirestore, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
-import app from "../../utils/firebase";
+import { db } from "../../utils/firebase";
 
 const style = {
   position: "absolute",
@@ -21,7 +21,6 @@ const style = {
 };
 const theme = createTheme();
 export default function EditModal(props) {
-  const db = getFirestore(app);
   const [name, setName] = useState(props.order?.name);
   const [email, setEmail] = useState(props.order?.email);
   const [phone, setPhone] = useState(props.order?.phone);

@@ -8,30 +8,21 @@ import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/router";
 
 const settings = ["Logout"];
 
-function Navbar() {
+function Navbar(props) {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const router = useRouter();
-  const [signedInUser,setSignedInUser]=useState();
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  const auth = getAuth();
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-     setSignedInUser(user);
-    }
-  });
-  console.log(signedInUser)
   function handleLogout() {
-    auth.signOut().then(() => {
+    props.auth.signOut().then(() => {
       router.push("/");
     });
   }
@@ -61,7 +52,7 @@ function Navbar() {
         <Box sx={{ flexGrow: 0 }}>
           <Tooltip>
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt="Profile Picture" src={signedInUser?.photoURL} />
+              <Avatar alt="Profile Picture" src={props.user?.photoURL} />
             </IconButton>
           </Tooltip>
           <Menu

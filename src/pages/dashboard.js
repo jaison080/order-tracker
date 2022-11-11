@@ -203,6 +203,7 @@ function Dashboard() {
           open={open1}
           setOpen={setOpen1}
           order={selectedOrder}
+          delivery_date={selectedOrder?.delivery_date}
           settempOrders={settempOrders}
         />
       </div>

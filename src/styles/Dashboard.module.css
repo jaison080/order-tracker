@@ -25,7 +25,7 @@
 .action_buttons
 {
     display: flex;
-    width: max-content;
+    align-items: center;
     column-gap: 15px;
     justify-content: space-between;
 }

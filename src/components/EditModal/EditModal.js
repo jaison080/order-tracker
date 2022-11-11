@@ -7,10 +7,10 @@ import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { doc, setDoc } from "firebase/firestore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { db } from "../../utils/firebase";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 
 const style = {
@@ -24,14 +24,21 @@ const style = {
 };
 const theme = createTheme();
 export default function EditModal(props) {
-  console.log(props.order);
+  useEffect(() => {
+    console.log(props.order);
+  }, [props.order]);
+  console.log(dayjs(`${props.order?.delivery_date}`, "YYYY-MM-DD"));
   const [name, setName] = useState(props.order?.name);
   const [email, setEmail] = useState(props.order?.email);
   const [phone, setPhone] = useState(props.order?.phone);
   const [address, setAddress] = useState(props.order?.address);
   const [quantity, setQuantity] = useState(props.order?.quantity);
-  const [delivery_date, setDeliveryDate1] = useState(dayjs((props.order?.delivery_date), "DD/MM/YYYY"));
-  const [order_date, setOrderDate1] = useState(dayjs((props.order?.order_date),"DD/MM/YYYY"));
+  const [delivery_date, setDeliveryDate1] = useState(
+    dayjs(`${props.order?.delivery_date}`, "YYYY-MM-DD")
+  );
+  const [order_date, setOrderDate1] = useState(
+    dayjs(`${props.order?.order_date}`, "YYYY-MM-DD")
+  );
   const handleChange = (newValue) => {
     setOrderDate1(newValue);
   };
@@ -41,7 +48,6 @@ export default function EditModal(props) {
   async function EditOrder(order, id) {
     await setDoc(doc(db, "orders", id), order);
   }
-
   const handleClose = () => props.setOpen(false);
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -51,14 +57,24 @@ export default function EditModal(props) {
       phone: phone || props.order?.phone,
       address: address || props.order?.address,
       quantity: quantity || props.order?.quantity,
-      delivery_date: delivery_date.format("DD/MM/YYYY") || props.order?.delivery_date,
-      order_date: order_date.format("DD/MM/YYYY") || props.order?.order_date,
+      delivery_date:
+        delivery_date.format("YYYY-MM-DD") || props.order?.delivery_date,
+      order_date: order_date.format("YYYY-MM-DD") || props.order?.order_date,
     };
     EditOrder(updateOrder, props.order.id).then(() => {
       handleClose();
       props.settempOrders(updateOrder);
     });
   };
+  console.log(delivery_date);
+  if (!order_date) {
+    console.log("order_date");
+    return (
+      <div>
+        <h1>Loading...</h1>
+      </div>
+    );
+  }
   return (
     <div>
       <Modal
@@ -162,25 +178,57 @@ export default function EditModal(props) {
                     <Grid item xs={12}>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DesktopDatePicker
-                        label="Order Date"
-                        inputFormat="DD/MM/YYYY"
-                        value={order_date ? order_date : props.order?.order_date}
-                        onChange={handleChange}
-                        renderInput={(params) => <TextField 
-                          fullWidth {...params} />}
-                      />
+                          label="Order Date"
+                          inputFormat="YYYY-MM-DD"
+                          value={
+                            order_date
+                              ? order_date
+                              : dayjs(
+                                  `${props.order?.order_date}`,
+                                  "YYYY-MM-DD"
+                                )
+                          }
+                          onChange={handleChange}
+                          renderInput={(params) => (
+                            <TextField
+                              value={
+                                order_date
+                                  ? order_date
+                                  : props.order?.order_date
+                              }
+                              fullWidth
+                              {...params}
+                            />
+                          )}
+                        />
                       </LocalizationProvider>
                     </Grid>
                     <Grid item xs={12}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DesktopDatePicker
-                        label="Delivery Date"
-                        inputFormat="DD/MM/YYYY"
-                        value={delivery_date ? delivery_date : props.order?.delivery_date}
-                        onChange={handleChange1}
-                        renderInput={(params) => <TextField 
-                          fullWidth {...params} />}
-                      />
+                          label="Delivery Date"
+                          inputFormat="YYYY-MM-DD"
+                          value={
+                            delivery_date
+                              ? delivery_date
+                              : dayjs(
+                                  `${props.order?.delivery_date}`,
+                                  "YYYY-MM-DD"
+                                )
+                          }
+                          onChange={handleChange1}
+                          renderInput={(params) => (
+                            <TextField
+                              value={
+                                delivery_date
+                                  ? delivery_date
+                                  : props.order?.delivery_date
+                              }
+                              fullWidth
+                              {...params}
+                            />
+                          )}
+                        />
                       </LocalizationProvider>
                     </Grid>
                   </Grid>

@@ -26,7 +26,6 @@ const theme = createTheme();
 export default function AddModal(props) {
   const [orderDate, setOrderDate] = useState(dayjs(Date.now()));
   const [deliveryDate, setDeliveryDate] = useState(dayjs(Date.now()));
-
   const handleChange = (newValue) => {
     setOrderDate(newValue);
   };
@@ -46,8 +45,8 @@ export default function AddModal(props) {
       phone: data.get("phone"),
       address: data.get("address"),
       quantity: data.get("quantity"),
-      delivery_date: deliveryDate.format("DD/MM/YYYY"),
-      order_date: orderDate.format("DD/MM/YYYY"),
+      delivery_date: deliveryDate.format("YYYY-MM-DD"),
+      order_date: orderDate.format("YYYY-MM-DD"),
       isCompleted: false,
     };
     AddOrder(order).then(() => {

@@ -47,11 +47,14 @@ function Login() {
         console.log(error);
       });
   }
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      router.push("/dashboard");
-    }
-  });
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        router.push("/dashboard");
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
   if (loading) {
     return (
       <div className={styles.loader}>

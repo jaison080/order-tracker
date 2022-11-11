@@ -31,13 +31,18 @@ function Dashboard() {
     setOpen1(true);
   };
   const auth = getAuth();
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setSignedInUser(user);
-    } else {
-      router.push("/");
-    }
-  });
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setSignedInUser(user);
+      }
+      else
+      {
+        router.push("/");
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
   async function getOrders() {
     let temp = [];
     const querySnapshot = await getDocs(collection(db, "orders"));

@@ -1,52 +1,52 @@
 import * as React from "react";
-// import Box from "@mui/material/Box";
-// import Modal from "@mui/material/Modal";
-// import { TextField } from "@mui/material";
-// import Button from "@mui/material/Button";
-// import CssBaseline from "@mui/material/CssBaseline";
-// import Grid from "@mui/material/Grid";
-// import Container from "@mui/material/Container";
-// import { createTheme, ThemeProvider } from "@mui/material/styles";
-// import { addDoc, collection } from "firebase/firestore";
-// import { db } from "../../utils/firebase";
-// const style = {
-//   position: "absolute",
-//   top: "50%",
-//   left: "50%",
-//   transform: "translate(-50%, -50%)",
-//   bgcolor: "background.paper",
-//   boxShadow: 24,
-//   p: 4,
-// };
-// const theme = createTheme();
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import { TextField } from "@mui/material";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import Grid from "@mui/material/Grid";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../../utils/firebase";
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 4,
+};
+const theme = createTheme();
 
 export default function AddModal(props) {
-  // async function AddOrder(order) {
-  //   await addDoc(collection(db, "orders"), order);
-  // }
-  // const handleClose = () => props.setOpen(false);
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   const data = new FormData(event.currentTarget);
-  //   const order = {
-  //     name: data.get("name"),
-  //     email: data.get("email"),
-  //     phone: data.get("phone"),
-  //     address: data.get("address"),
-  //     quantity: data.get("quantity"),
-  //     delivery_date: data.get("delivery_date"),
-  //     order_date: data.get("order_date"),
-  //     isCompleted: false,
-  //   };
-  //   AddOrder(order).then(() => {
-  //     handleClose();
-  //     props.settempOrders(order);
-  //   });
-  // };
+  async function AddOrder(order) {
+    await addDoc(collection(db, "orders"), order);
+  }
+  const handleClose = () => props.setOpen(false);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const order = {
+      name: data.get("name"),
+      email: data.get("email"),
+      phone: data.get("phone"),
+      address: data.get("address"),
+      quantity: data.get("quantity"),
+      delivery_date: data.get("delivery_date"),
+      order_date: data.get("order_date"),
+      isCompleted: false,
+    };
+    AddOrder(order).then(() => {
+      handleClose();
+      props.settempOrders(order);
+    });
+  };
 
   return (
     <div>
-      {/* <Modal
+      <Modal
         open={props.open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -160,7 +160,7 @@ export default function AddModal(props) {
             </Container>
           </ThemeProvider>
         </Box>
-              </Modal>*/}
+      </Modal>
     </div>
   );
 }

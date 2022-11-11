@@ -9,15 +9,19 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 function Completed() {
   const [signedInUser,setSignedInUser]=useState();
   const auth = getAuth();
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setSignedInUser(user);
-    }
-    else
-    {
-      router.push("/");
-    }
-  });
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setSignedInUser(user);
+      }
+      else
+      {
+        router.push("/");
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
+  
   const router = useRouter();
   const [orders, setOrders] = useState();
   const [loading, setLoading] = useState(true);

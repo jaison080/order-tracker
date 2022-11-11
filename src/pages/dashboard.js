@@ -5,12 +5,19 @@ import {
   deleteDoc,
   doc,
   setDoc,
+  getFirestore,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import AddModal from "../components/AddModal/AddModal";
 import EditModal from "../components/EditModal/EditModal";
-import db from "../utils/firebase";
+import styles from "../styles/Dashboard.module.css";
+import { useRouter } from "next/router";
+import Navbar from "../components/Navbar/Navbar";
+import app from "../utils/firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 function Dashboard() {
+  const db = getFirestore(app);
+  const router = useRouter();
   const [orders, setOrders] = useState();
   const [tempOrders, settempOrders] = useState();
   const [selectedOrder, setSelectedOrder] = useState();
@@ -21,6 +28,16 @@ function Dashboard() {
   const handleOpen1 = () => {
     setOpen1(true);
   };
+  const auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const signedInUser = user;
+    }
+    else
+    {
+      router.push("/");
+    }
+  });
   async function getOrders() {
     let temp = [];
     const querySnapshot = await getDocs(collection(db, "orders"));
@@ -32,6 +49,7 @@ function Dashboard() {
     setOrders(temp);
     setLoading(false);
   }
+
   async function deleteOrder(id) {
     await deleteDoc(doc(db, "orders", id));
     getOrders();
@@ -58,73 +76,115 @@ function Dashboard() {
   }
   useEffect(() => {
     getOrders();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tempOrders]);
+  function completedPage() {
+    router.push("/completed");
+  }
   if (loading) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className={styles.loader}>
+        <h5>Loading...</h5>
+      </div>
+    );
   }
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <Button onClick={handleOpen} variant="contained">
-        Add Order
-      </Button>
-      <AddModal open={open} setOpen={setOpen} settempOrders={settempOrders} />
-      {orders.map((singleOrder, index) => {
-        return (
-          <div key={index}>
-            <h2>Order ID : {singleOrder.id}</h2>
-            <p>Customer Name : {singleOrder.name}</p>
-            <p>Phone No : {singleOrder.phone}</p>
-            <p>Email : {singleOrder.email}</p>
-            <p>Address : {singleOrder.address}</p>
-            <p>Delivery Date : {singleOrder.delivery_date}</p>
-            <p>Order Date : {singleOrder.order_date}</p>
-            <p>Quantity : {singleOrder.quantity}</p>
-            {singleOrder.isCompleted ? (
-              <Button
-                onClick={() => incompleteOrder(singleOrder.id)}
-                variant="contained"
-                color="warning"
-              >
-                Mark as Incomplete
-              </Button>
-            ) : (
-              <Button
-                onClick={() => completeOrder(singleOrder.id)}
-                variant="contained"
-                color="success"
-              >
-                Mark as Completed
-              </Button>
-            )}
-
-            <Button
-              onClick={() => deleteOrder(singleOrder.id)}
-              variant="contained"
-              color="error"
-            >
-              Delete Order
+    <>
+      <Navbar />
+      <div className={styles.dashboard_container}>
+        <div className={styles.header}>
+          <h1>Dashboard</h1>
+          <div className={styles.header_buttons}>
+            <Button onClick={completedPage} variant="contained" color="success">
+              View Completed Orders
             </Button>
-            <Button
-              onClick={() => {
-                setSelectedOrder(singleOrder);
-                handleOpen1();
-              }}
-              variant="contained"
-              color="secondary"
-            >
-              Edit Order
+            <Button onClick={handleOpen} variant="contained">
+              Add Order
             </Button>
           </div>
-        );
-      })}
-      <EditModal
-        open={open1}
-        setOpen={setOpen1}
-        order={selectedOrder}
-        settempOrders={settempOrders}
-      />
-    </div>
+        </div>
+        <AddModal open={open} setOpen={setOpen} settempOrders={settempOrders} />
+        <div>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer Name</th>
+                <th>Customer Email</th>
+                <th>Customer Phone</th>
+                <th>Customer Address</th>
+                <th>Quantity</th>
+                <th>Order Date</th>
+                <th>Delivery Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.map((singleOrder, index) => {
+                return (
+                  <tr key={index}>
+                    <td>{singleOrder.id}</td>
+                    <td>{singleOrder.name}</td>
+                    <td>{singleOrder.phone}</td>
+                    <td>{singleOrder.email}</td>
+                    <td>{singleOrder.address}</td>
+                    <td>{singleOrder.quantity}</td>
+                    <td>{singleOrder.order_date}</td>
+                    <td>{singleOrder.delivery_date}</td>
+                    <td>
+                      <div className={styles.action_buttons}>
+                        {singleOrder.isCompleted ? (
+                          <Button
+                            onClick={() => incompleteOrder(singleOrder.id)}
+                            variant="contained"
+                            color="warning"
+                          >
+                            Mark as Incomplete
+                          </Button>
+                        ) : (
+                          <Button
+                            onClick={() => completeOrder(singleOrder.id)}
+                            variant="contained"
+                            color="success"
+                          >
+                            Mark as Completed
+                          </Button>
+                        )}
+
+                        <Button
+                          onClick={() => deleteOrder(singleOrder.id)}
+                          variant="contained"
+                          color="error"
+                        >
+                          Delete Order
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            setSelectedOrder(singleOrder);
+                            handleOpen1();
+                          }}
+                          variant="contained"
+                          color="secondary"
+                        >
+                          Edit Order
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+            <tfoot></tfoot>
+          </table>
+        </div>
+        <EditModal
+          open={open1}
+          setOpen={setOpen1}
+          order={selectedOrder}
+          settempOrders={settempOrders}
+        />
+      </div>
+    </>
   );
 }
 export default Dashboard;

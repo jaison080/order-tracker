@@ -32,9 +32,7 @@ function Dashboard() {
   onAuthStateChanged(auth, (user) => {
     if (user) {
       const signedInUser = user;
-    }
-    else
-    {
+    } else {
       router.push("/");
     }
   });
@@ -52,7 +50,7 @@ function Dashboard() {
 
   async function deleteOrder(id) {
     await deleteDoc(doc(db, "orders", id));
-    getOrders();
+    settempOrders(id);
   }
   async function completeOrder(id) {
     await setDoc(

@@ -7,7 +7,7 @@ import Menu from "@mui/material/Menu";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import MenuIcon from '@mui/icons-material/Menu';
+import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import styles from "./Navbar.module.css";
@@ -19,7 +19,7 @@ function Navbar(props) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
-  }
+  };
   const router = useRouter();
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -34,69 +34,79 @@ function Navbar(props) {
   }
   return (
     <>
-    <AppBar position="static">
-      <Toolbar disableGutters className={styles.toolbar}>
-      <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-            onClick={handleDrawerOpen}
+      <AppBar position="static">
+        <Toolbar disableGutters className={styles.toolbar}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
           >
-            <MenuIcon />
-          </IconButton>
-        <Typography
-          variant="h6"
-          noWrap
-          component="a"
-          href="/"
-          sx={{
-            fontWeight: 700,
-            textDecoration: "none",
-          }}
-        >
-          ORDER TRACKER
-        </Typography>
-        <Box sx={{ flexGrow: 0 }}>
-          <Tooltip>
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt="Profile Picture" src={props.user?.photoURL} />
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+            >
+              <MenuIcon />
             </IconButton>
-          </Tooltip>
-          <Menu
-            sx={{ mt: "45px" }}
-            id="menu-appbar"
-            anchorEl={anchorElUser}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
+            <div style={{ cursor: "pointer" }} onClick={handleDrawerOpen}>
+              MENU
+            </div>
+          </div>
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              fontWeight: 700,
+              textDecoration: "none",
             }}
-            keepMounted
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            open={Boolean(anchorElUser)}
-            onClose={handleCloseUserMenu}
           >
-            {settings.map((setting) => (
-              <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                <Typography
-                  textAlign="center"
-                  onClick={handleLogout}
-                  color="error"
-                  fontWeight={600}
-                >
-                  {setting}
-                </Typography>
-              </MenuItem>
-            ))}
-          </Menu>
-        </Box>
-      </Toolbar>
-    </AppBar>
-    <NavbarDrawer setDrawerOpen = {setDrawerOpen} drawerOpen = {drawerOpen} />
+            ORDER TRACKER
+          </Typography>
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip>
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt="Profile Picture" src={props.user?.photoURL} />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              {settings.map((setting) => (
+                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                  <Typography
+                    textAlign="center"
+                    onClick={handleLogout}
+                    color="error"
+                    fontWeight={600}
+                  >
+                    {setting}
+                  </Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+        </Toolbar>
+      </AppBar>
+      <NavbarDrawer setDrawerOpen={setDrawerOpen} drawerOpen={drawerOpen} />
     </>
   );
 }

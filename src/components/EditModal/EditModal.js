@@ -54,6 +54,7 @@ export default function EditModal(props) {
     };
     EditOrder(updateOrder, props.order.id).then(() => {
       handleClose();
+      setQuantity("");
       props.settempOrders(updateOrder);
     });
   };

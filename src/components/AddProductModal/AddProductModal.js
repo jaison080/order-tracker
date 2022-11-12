@@ -85,7 +85,7 @@ export default function AddProductModal(props) {
                         required
                         fullWidth
                         label="Price"
-                        type="text"
+                        type="number"
                         name="price"
                         id="price"
                       />

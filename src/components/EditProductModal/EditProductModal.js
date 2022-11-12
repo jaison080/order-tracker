@@ -42,6 +42,7 @@ export default function EditProductModal(props) {
     };
     EditProduct(updateProduct, props.product.id).then(() => {
       handleClose();
+      setPrice("");
       props.settempOrders(props.product.id);
     });
   };

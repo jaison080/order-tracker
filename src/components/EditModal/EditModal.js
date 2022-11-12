@@ -161,7 +161,9 @@ export default function EditModal(props) {
                       />
                     </Grid>
                     <Grid item xs={12}>
-                      <label className={styles.input_date_label}>Order Date</label>
+                      <label className={styles.input_date_label}>
+                        Order Date
+                      </label>
                       <br />
                       <input
                         type="date"
@@ -175,7 +177,9 @@ export default function EditModal(props) {
                       />
                     </Grid>
                     <Grid item xs={12}>
-                      <label className={styles.input_date_label}>Delivery Date</label>
+                      <label className={styles.input_date_label}>
+                        Delivery Date
+                      </label>
                       <br />
                       <input
                         type="date"

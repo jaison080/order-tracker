@@ -1,0 +1,12 @@
+.toolbar {
+  display: flex !important;
+  justify-content: space-between !important;
+  padding-left: 1% !important;
+  padding-right: 1% !important;
+}
+@media (max-width: 630px) {
+  .toolbar {
+    padding-left: 5% !important;
+    padding-right: 5% !important;
+  }
+}

@@ -9,7 +9,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
 import { useRouter } from "next/router";
-
+import styles from "./Navbar.module.css";
 const settings = ["Logout"];
 
 function Navbar(props) {
@@ -28,15 +28,7 @@ function Navbar(props) {
   }
   return (
     <AppBar position="static">
-      <Toolbar
-        disableGutters
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          paddingLeft: "1%",
-          paddingRight: "1%",
-        }}
-      >
+      <Toolbar disableGutters className={styles.toolbar}>
         <Typography
           variant="h6"
           noWrap

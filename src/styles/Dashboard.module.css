@@ -56,3 +56,14 @@
   align-items: center;
   height: 100vh;
 }
+@media (max-width: 620px) {
+  .header {
+    flex-direction: column;
+    padding-bottom: 5%;
+  }
+  .header_buttons {
+    flex-direction: column;
+    row-gap: 20px;
+    align-items: center;
+  }
+}

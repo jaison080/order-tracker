@@ -1,6 +1,14 @@
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import {
+  FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  Select,
+  TextField,
+} from "@mui/material";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
@@ -32,7 +40,11 @@ export default function EditCustomerModal(props) {
   const [email, setEmail] = useState(props.customer?.email);
   const [address, setAddress] = useState(props.customer?.address);
   const [city, setCity] = useState(props.customer?.city);
+  const [role, setRole] = useState(props.role);
   const [cities, setCities] = useState();
+  const handleChangeRole = (event) => {
+    setRole(event.target.value);
+  };
   useEffect(() => {
     getCities();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -60,6 +72,7 @@ export default function EditCustomerModal(props) {
       email: email || props.customer?.email,
       address: address || props.customer?.address,
       city: city || props.customer?.city,
+      role: role || props.customer?.role,
     };
     EditCustomer(updateCustomer, props.customer.id).then(() => {
       handleClose();
@@ -173,6 +186,26 @@ export default function EditCustomerModal(props) {
                         })}
                       </Select>
                     </Grid>
+                    <Grid item xs={12}>
+                      <InputLabel>Role</InputLabel>
+                      <RadioGroup
+                        name="Role"
+                        row
+                        value={(role)?role:props.customer?.role}
+                        onChange={handleChangeRole}
+                      >
+                        <FormControlLabel
+                          value="dealer"
+                          control={<Radio />}
+                          label="Dealer"
+                        />
+                        <FormControlLabel
+                          value="customer"
+                          control={<Radio />}
+                          label="Customer"
+                        />
+                      </RadioGroup>
+                    </Grid>
                   </Grid>
                   <Button
                     type="submit"
@@ -180,7 +213,7 @@ export default function EditCustomerModal(props) {
                     variant="contained"
                     sx={{ mt: 3, mb: 2 }}
                   >
-                    Update Customer
+                    Update Member
                   </Button>
                 </Box>
               </Box>

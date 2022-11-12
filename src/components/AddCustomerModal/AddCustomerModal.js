@@ -1,6 +1,14 @@
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import {
+  FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  Select,
+  TextField,
+} from "@mui/material";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
@@ -30,7 +38,13 @@ const theme = createTheme({
 export default function AddCustomerModal(props) {
   const [cities, setCities] = useState();
 
-  const [city, setCity] = useState(cities?.[0]?.name);
+  const [city, setCity] = useState();
+  const [role, setRole] = useState(props.role);
+
+  const handleChangeRole = (event) => {
+    setRole(event.target.value);
+  };
+
   async function getCities() {
     let temp = [];
     const querySnapshot = await getDocs(collection(db, "cities"));
@@ -63,6 +77,7 @@ export default function AddCustomerModal(props) {
       email: data.get("email"),
       address: data.get("address"),
       city: city,
+      role: role,
     };
     AddCustomer(customer).then(() => {
       handleClose();
@@ -139,14 +154,12 @@ export default function AddCustomerModal(props) {
                       />
                     </Grid>
                     <Grid item xs={12}>
-                      <InputLabel id="demo-simple-select-label">
-                        City
-                      </InputLabel>
+                      <InputLabel>City</InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         fullWidth
-                        value={city}
+                        value={city ? city : cities?.[0]?.name}
                         onChange={handleChange}
                       >
                         {cities?.map((city) => {
@@ -158,6 +171,26 @@ export default function AddCustomerModal(props) {
                         })}
                       </Select>
                     </Grid>
+                    <Grid item xs={12}>
+                      <InputLabel>Role</InputLabel>
+                      <RadioGroup
+                        name="Role"
+                        row
+                        value={role}
+                        onChange={handleChangeRole}
+                      >
+                        <FormControlLabel
+                          value="dealer"
+                          control={<Radio />}
+                          label="Dealer"
+                        />
+                        <FormControlLabel
+                          value="customer"
+                          control={<Radio />}
+                          label="Customer"
+                        />
+                      </RadioGroup>
+                    </Grid>
                   </Grid>
                   <Button
                     type="submit"
@@ -165,7 +198,7 @@ export default function AddCustomerModal(props) {
                     variant="contained"
                     sx={{ mt: 3, mb: 2 }}
                   >
-                    Add Customer
+                    Add Member
                   </Button>
                 </Box>
               </Box>

@@ -42,7 +42,9 @@ function Customers() {
     querySnapshot.forEach((doc) => {
       let data = doc.data();
       data.id = doc.id;
-      temp.push(data);
+      if (data.role === "customer") {
+        temp.push(data);
+      }
     });
     setCustomers(temp);
     setLoading(false);
@@ -82,7 +84,7 @@ function Customers() {
               variant="contained"
               sx={{ display: "flex", columnGap: "15px" }}
             >
-              <FaPlus size={20} /> Add Customer
+              <FaPlus size={20} /> Add Member
             </Button>
           </div>
         </div>
@@ -142,6 +144,7 @@ function Customers() {
         </div>
         <AddCustomerModal
           open={open}
+          role={"customer"}
           setOpen={setOpen}
           settempOrders={settempOrders}
         />

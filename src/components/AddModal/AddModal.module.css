@@ -1,0 +1,14 @@
+.input_date {
+  width: 100%;
+  height: 50px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 16px;
+  outline: none;
+  margin-bottom: 10px;
+}
+.input_date::-webkit-calendar-picker-indicator {
+  width: 25px;
+  height: 25px;
+}

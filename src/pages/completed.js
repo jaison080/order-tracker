@@ -47,7 +47,6 @@ function Completed() {
       <>
         <Head>
           <title>Order Tracker | Completed Orders</title>
-          <meta name="viewport" content="width=1024, initial-scale=1" />
         </Head>
         <div className={styles.loader}>
           <h5>Loading...</h5>
@@ -59,7 +58,6 @@ function Completed() {
     <>
       <Head>
         <title>Order Tracker | Completed Orders</title>
-        <meta name="viewport" content="width=1024, initial-scale=1" />
       </Head>
       <Navbar user={signedInUser} auth={auth} />
       <div className={styles.completed_container}>

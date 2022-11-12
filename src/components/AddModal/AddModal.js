@@ -1,7 +1,6 @@
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { TextField } from "@mui/material";
-import dayjs from 'dayjs';
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
@@ -9,9 +8,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../utils/firebase";
-import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { useState } from "react";
+import styles from "./AddModal.module.css";
 const style = {
   position: "absolute",
   top: "50%",
@@ -21,17 +18,16 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-const theme = createTheme();
+const theme = createTheme({
+  typography: {
+    allVariants: {
+      fontFamily: "Montserrat",
+      textTransform: "none",
+    },
+  },
+});
 
 export default function AddModal(props) {
-  const [orderDate, setOrderDate] = useState(dayjs(Date.now()));
-  const [deliveryDate, setDeliveryDate] = useState(dayjs(Date.now()));
-  const handleChange = (newValue) => {
-    setOrderDate(newValue);
-  };
-  const handleChange1 = (newValue) => {
-    setDeliveryDate(newValue);
-  };
   async function AddOrder(order) {
     await addDoc(collection(db, "orders"), order);
   }
@@ -45,8 +41,8 @@ export default function AddModal(props) {
       phone: data.get("phone"),
       address: data.get("address"),
       quantity: data.get("quantity"),
-      delivery_date: deliveryDate.format("YYYY-MM-DD"),
-      order_date: orderDate.format("YYYY-MM-DD"),
+      delivery_date: data.get("delivery_date"),
+      order_date: data.get("order_date"),
       isCompleted: false,
     };
     AddOrder(order).then(() => {
@@ -127,6 +123,9 @@ export default function AddModal(props) {
                     <Grid item xs={12}>
                       <TextField
                         required
+                        InputProps={{
+                          inputProps: { min: 1 },
+                        }}
                         fullWidth
                         name="quantity"
                         label="Quantity"
@@ -136,28 +135,30 @@ export default function AddModal(props) {
                       />
                     </Grid>
                     <Grid item xs={12}>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DesktopDatePicker
+                      <label>Order Date</label>
+                      <br />
+                      <input
+                        type="date"
+                        required
+                        pattern="\d{4}-\d{2}-\d{2}"
+                        name="order_date"
                         label="Order Date"
-                        inputFormat="DD/MM/YYYY"
-                        value={orderDate}
-                        onChange={handleChange}
-                        renderInput={(params) => <TextField 
-                          fullWidth {...params} />}
+                        id="order_date"
+                        className={styles.input_date}
                       />
-                      </LocalizationProvider>
                     </Grid>
                     <Grid item xs={12}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DesktopDatePicker
+                      <label>Delivery Date</label>
+                      <br />
+                      <input
+                        type="date"
+                        className={styles.input_date}
+                        required
+                        pattern="\d{4}-\d{2}-\d{2}"
+                        name="delivery_date"
                         label="Delivery Date"
-                        inputFormat="DD/MM/YYYY"
-                        value={deliveryDate}
-                        onChange={handleChange1}
-                        renderInput={(params) => <TextField 
-                          fullWidth {...params} />}
+                        id="delivery_date"
                       />
-                      </LocalizationProvider>
                     </Grid>
                   </Grid>
                   <Button

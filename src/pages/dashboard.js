@@ -5,7 +5,6 @@ import {
   deleteDoc,
   doc,
   setDoc,
-  getFirestore,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import AddModal from "../components/AddModal/AddModal";
@@ -69,7 +68,7 @@ function Dashboard() {
       },
       { merge: true }
     );
-    settempOrders(id.isCompleted);
+    window.location.reload();
   }
   async function incompleteOrder(id) {
     await setDoc(
@@ -79,7 +78,7 @@ function Dashboard() {
       },
       { merge: true }
     );
-    settempOrders(id);
+    window.location.reload();
   }
   useEffect(() => {
     getOrders();
@@ -93,7 +92,6 @@ function Dashboard() {
       <>
         <Head>
           <title>Order Tracker | Dashboard</title>
-          <meta name="viewport" content="width=1024, initial-scale=1" />
         </Head>
         <div className={styles.loader}>
           <h5>Loading...</h5>
@@ -105,7 +103,6 @@ function Dashboard() {
     <>
       <Head>
         <title>Order Tracker | Dashboard</title>
-        <meta name="viewport" content="width=1024, initial-scale=1" />
       </Head>
       <Navbar user={signedInUser} auth={auth} />
       <div className={styles.dashboard_container}>
@@ -150,8 +147,12 @@ function Dashboard() {
                     <td>{singleOrder.email}</td>
                     <td>{singleOrder.address}</td>
                     <td>{singleOrder.quantity}</td>
-                    <td>{singleOrder.order_date}</td>
-                    <td>{singleOrder.delivery_date}</td>
+                    <td>
+                      {new Date(singleOrder.order_date).toLocaleDateString()}
+                    </td>
+                    <td>
+                      {new Date(singleOrder.delivery_date).toLocaleDateString()}
+                    </td>
                     <td>
                       <div className={styles.action_buttons}>
                         {singleOrder.isCompleted ? (
@@ -203,7 +204,6 @@ function Dashboard() {
           open={open1}
           setOpen={setOpen1}
           order={selectedOrder}
-          delivery_date={selectedOrder?.delivery_date}
           settempOrders={settempOrders}
         />
       </div>

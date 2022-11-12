@@ -7,12 +7,9 @@ import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { doc, setDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { db } from "../../utils/firebase";
-import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
-
+import styles from "./EditModal.module.css";
 const style = {
   position: "absolute",
   top: "50%",
@@ -22,29 +19,24 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-const theme = createTheme();
+const theme = createTheme({
+  typography: {
+    allVariants: {
+      fontFamily: "Montserrat",
+      textTransform: "none",
+    },
+  },
+});
 export default function EditModal(props) {
-  useEffect(() => {
-    console.log(props.order);
-  }, [props.order]);
-  console.log(dayjs(`${props.order?.delivery_date}`, "YYYY-MM-DD"));
   const [name, setName] = useState(props.order?.name);
   const [email, setEmail] = useState(props.order?.email);
   const [phone, setPhone] = useState(props.order?.phone);
   const [address, setAddress] = useState(props.order?.address);
   const [quantity, setQuantity] = useState(props.order?.quantity);
   const [delivery_date, setDeliveryDate1] = useState(
-    dayjs(`${props.order?.delivery_date}`, "YYYY-MM-DD")
+    props.order?.delivery_date
   );
-  const [order_date, setOrderDate1] = useState(
-    dayjs(`${props.order?.order_date}`, "YYYY-MM-DD")
-  );
-  const handleChange = (newValue) => {
-    setOrderDate1(newValue);
-  };
-  const handleChange1 = (newValue) => {
-    setDeliveryDate1(newValue);
-  };
+  const [order_date, setOrderDate1] = useState(props.order?.order_date);
   async function EditOrder(order, id) {
     await setDoc(doc(db, "orders", id), order);
   }
@@ -57,24 +49,14 @@ export default function EditModal(props) {
       phone: phone || props.order?.phone,
       address: address || props.order?.address,
       quantity: quantity || props.order?.quantity,
-      delivery_date:
-        delivery_date.format("YYYY-MM-DD") || props.order?.delivery_date,
-      order_date: order_date.format("YYYY-MM-DD") || props.order?.order_date,
+      delivery_date: delivery_date || props.order?.delivery_date,
+      order_date: order_date || props.order?.order_date,
     };
     EditOrder(updateOrder, props.order.id).then(() => {
       handleClose();
       props.settempOrders(updateOrder);
     });
   };
-  console.log(delivery_date);
-  if (!order_date) {
-    console.log("order_date");
-    return (
-      <div>
-        <h1>Loading...</h1>
-      </div>
-    );
-  }
   return (
     <div>
       <Modal
@@ -165,6 +147,9 @@ export default function EditModal(props) {
                         required
                         fullWidth
                         name="quantity"
+                        InputProps={{
+                          inputProps: { min: 1 },
+                        }}
                         value={quantity ? quantity : props.order?.quantity}
                         onChange={(e) => {
                           setQuantity(e.target.value);
@@ -176,60 +161,34 @@ export default function EditModal(props) {
                       />
                     </Grid>
                     <Grid item xs={12}>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DesktopDatePicker
-                          label="Order Date"
-                          inputFormat="YYYY-MM-DD"
-                          value={
-                            order_date
-                              ? order_date
-                              : dayjs(
-                                  `${props.order?.order_date}`,
-                                  "YYYY-MM-DD"
-                                )
-                          }
-                          onChange={handleChange}
-                          renderInput={(params) => (
-                            <TextField
-                              value={
-                                order_date
-                                  ? order_date
-                                  : props.order?.order_date
-                              }
-                              fullWidth
-                              {...params}
-                            />
-                          )}
-                        />
-                      </LocalizationProvider>
+                      <label className={styles.input_date_label}>Order Date</label>
+                      <br />
+                      <input
+                        type="date"
+                        className={styles.input_date}
+                        value={
+                          order_date ? order_date : props.order?.order_date
+                        }
+                        onChange={(e) => {
+                          setOrderDate1(e.target.value);
+                        }}
+                      />
                     </Grid>
                     <Grid item xs={12}>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DesktopDatePicker
-                          label="Delivery Date"
-                          inputFormat="YYYY-MM-DD"
-                          value={
-                            delivery_date
-                              ? delivery_date
-                              : dayjs(
-                                  `${props.order?.delivery_date}`,
-                                  "YYYY-MM-DD"
-                                )
-                          }
-                          onChange={handleChange1}
-                          renderInput={(params) => (
-                            <TextField
-                              value={
-                                delivery_date
-                                  ? delivery_date
-                                  : props.order?.delivery_date
-                              }
-                              fullWidth
-                              {...params}
-                            />
-                          )}
-                        />
-                      </LocalizationProvider>
+                      <label className={styles.input_date_label}>Delivery Date</label>
+                      <br />
+                      <input
+                        type="date"
+                        className={styles.input_date}
+                        value={
+                          delivery_date
+                            ? delivery_date
+                            : props.order?.delivery_date
+                        }
+                        onChange={(e) => {
+                          setDeliveryDate1(e.target.value);
+                        }}
+                      />
                     </Grid>
                   </Grid>
                   <Button

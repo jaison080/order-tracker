@@ -157,6 +157,7 @@ function Dashboard() {
                       <div className={styles.action_buttons}>
                         {singleOrder.isCompleted ? (
                           <Button
+                            title="Mark as Incomplete"
                             onClick={() => incompleteOrder(singleOrder.id)}
                             variant="contained"
                             color="warning"
@@ -165,6 +166,7 @@ function Dashboard() {
                           </Button>
                         ) : (
                           <Button
+                            title="Mark As Completed"
                             onClick={() => completeOrder(singleOrder.id)}
                             variant="contained"
                             color="success"
@@ -174,6 +176,7 @@ function Dashboard() {
                         )}
 
                         <Button
+                          title="Delete Order"
                           onClick={() => deleteOrder(singleOrder.id)}
                           variant="contained"
                           color="error"
@@ -181,6 +184,7 @@ function Dashboard() {
                           <RiDeleteBin6Fill size={20} />
                         </Button>
                         <Button
+                          title="Edit Order"
                           onClick={() => {
                             setSelectedOrder(singleOrder);
                             handleOpen1();

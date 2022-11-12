@@ -84,14 +84,11 @@ function Dashboard() {
     getOrders();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tempOrders]);
-  function completedPage() {
-    router.push("/completed");
-  }
   if (loading) {
     return (
       <>
         <Head>
-          <title>Order Tracker | Dashboard</title>
+          <title>Order Tracker | All Orders</title>
         </Head>
         <div className={styles.loader}>
           <h5>Loading...</h5>
@@ -102,16 +99,13 @@ function Dashboard() {
   return (
     <>
       <Head>
-        <title>Order Tracker | Dashboard</title>
+        <title>Order Tracker | All Orders</title>
       </Head>
       <Navbar user={signedInUser} auth={auth} />
       <div className={styles.dashboard_container}>
         <div className={styles.header}>
-          <h1>Dashboard</h1>
+          <h1>All Orders</h1>
           <div className={styles.header_buttons}>
-            <Button onClick={completedPage} variant="contained" color="success">
-              View Completed Orders
-            </Button>
             <Button
               onClick={handleOpen}
               variant="contained"

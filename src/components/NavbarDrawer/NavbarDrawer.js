@@ -15,6 +15,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import SellIcon from "@mui/icons-material/Sell";
 import ApartmentIcon from "@mui/icons-material/Apartment";
+import ArticleIcon from "@mui/icons-material/Article";
 import { useRouter } from "next/router";
 const drawerWidth = 300;
 
@@ -39,6 +40,7 @@ const NavbarDrawer = (props) => {
   let drawerElementColor = [];
   const router = useRouter();
   [
+    "/dashboard",
     "/cities",
     "/customers",
     "/dealers",
@@ -91,11 +93,22 @@ const NavbarDrawer = (props) => {
       <List>
         <ListItem
           button
-          key="Cities"
+          key="All Orders"
           sx={{ color: drawerElementColor[0] }}
-          onClick={() => router.push("/cities")}
+          onClick={() => router.push("/dashboard")}
         >
           <ListItemIcon sx={{ color: drawerElementColor[0] }}>
+            <ArticleIcon />
+          </ListItemIcon>
+          <ListItemText primary="All Orders" />
+        </ListItem>
+        <ListItem
+          button
+          key="Cities"
+          sx={{ color: drawerElementColor[1] }}
+          onClick={() => router.push("/cities")}
+        >
+          <ListItemIcon sx={{ color: drawerElementColor[1] }}>
             <ApartmentIcon />
           </ListItemIcon>
           <ListItemText primary="Cities" />
@@ -104,10 +117,10 @@ const NavbarDrawer = (props) => {
         <ListItem
           button
           key="Customers"
-          sx={{ color: drawerElementColor[1] }}
+          sx={{ color: drawerElementColor[2] }}
           onClick={() => router.push("/customers")}
         >
-          <ListItemIcon sx={{ color: drawerElementColor[1] }}>
+          <ListItemIcon sx={{ color: drawerElementColor[2] }}>
             <GroupsIcon />
           </ListItemIcon>
           <ListItemText primary="Customers" />
@@ -116,10 +129,10 @@ const NavbarDrawer = (props) => {
         <ListItem
           button
           key="Dealers"
-          sx={{ color: drawerElementColor[2] }}
+          sx={{ color: drawerElementColor[3] }}
           onClick={() => router.push("/dealers")}
         >
-          <ListItemIcon sx={{ color: drawerElementColor[2] }}>
+          <ListItemIcon sx={{ color: drawerElementColor[3] }}>
             <StorefrontIcon />
           </ListItemIcon>
           <ListItemText primary="Dealers" />
@@ -128,10 +141,10 @@ const NavbarDrawer = (props) => {
         <ListItem
           button
           key="Products"
-          sx={{ color: drawerElementColor[3] }}
+          sx={{ color: drawerElementColor[4] }}
           onClick={() => router.push("/products")}
         >
-          <ListItemIcon sx={{ color: drawerElementColor[3] }}>
+          <ListItemIcon sx={{ color: drawerElementColor[4] }}>
             <CategoryIcon />
           </ListItemIcon>
           <ListItemText primary="Products" />
@@ -140,10 +153,10 @@ const NavbarDrawer = (props) => {
         <ListItem
           button
           key="Pending Orders"
-          sx={{ color: drawerElementColor[4] }}
+          sx={{ color: drawerElementColor[5] }}
           onClick={() => router.push("/pending")}
         >
-          <ListItemIcon sx={{ color: drawerElementColor[4] }}>
+          <ListItemIcon sx={{ color: drawerElementColor[5] }}>
             <SellIcon />
           </ListItemIcon>
           <ListItemText primary="Pending Orders" />
@@ -152,10 +165,10 @@ const NavbarDrawer = (props) => {
         <ListItem
           button
           key="Bill / Invoice Generation"
-          sx={{ color: drawerElementColor[5] }}
+          sx={{ color: drawerElementColor[6] }}
           onClick={() => router.push("/generatebill")}
         >
-          <ListItemIcon sx={{ color: drawerElementColor[5] }}>
+          <ListItemIcon sx={{ color: drawerElementColor[6] }}>
             <ReceiptLongIcon />
           </ListItemIcon>
           <ListItemText primary="Bill / Invoice Generation" />
@@ -164,10 +177,10 @@ const NavbarDrawer = (props) => {
         <ListItem
           button
           key="Delivery"
-          sx={{ color: drawerElementColor[6] }}
+          sx={{ color: drawerElementColor[7] }}
           onClick={() => router.push("/delivery")}
         >
-          <ListItemIcon sx={{ color: drawerElementColor[6] }}>
+          <ListItemIcon sx={{ color: drawerElementColor[7] }}>
             <DeliveryDiningIcon />
           </ListItemIcon>
           <ListItemText primary="Delivery" />

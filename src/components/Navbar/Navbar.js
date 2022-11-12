@@ -33,8 +33,8 @@ function Navbar(props) {
         sx={{
           display: "flex",
           justifyContent: "space-between",
-          paddingLeft: "5%",
-          paddingRight: "5%",
+          paddingLeft: "1%",
+          paddingRight: "1%",
         }}
       >
         <Typography
@@ -73,7 +73,12 @@ function Navbar(props) {
           >
             {settings.map((setting) => (
               <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                <Typography textAlign="center" onClick={handleLogout}>
+                <Typography
+                  textAlign="center"
+                  onClick={handleLogout}
+                  color="error"
+                  fontWeight={600}
+                >
                   {setting}
                 </Typography>
               </MenuItem>

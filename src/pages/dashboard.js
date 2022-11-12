@@ -122,7 +122,7 @@ function Dashboard() {
           </div>
         </div>
 
-        <div>
+        <div className={styles.table_container}>
           <table className={styles.table}>
             <thead>
               <tr>

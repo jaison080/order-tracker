@@ -2,18 +2,37 @@
   border: 1px solid black;
   width: 100%;
 }
+.table_container {
+  overflow-x: auto;
+  padding-bottom: 2%;
+}
+.table_container::-webkit-scrollbar {
+  width: 0.7em;
+}
+
+.table_container::-webkit-scrollbar-track {
+  background-color: whitesmoke;
+  border-radius: 10px;
+}
+
+.table_container::-webkit-scrollbar-thumb {
+  background-color: #1b87df;
+  border-radius: 10px;
+}
 .table th {
   border: 1px solid black;
+  padding: 15px;
 }
 .table td {
   border: 1px solid black;
   padding: 15px;
+  width: min-content;
 }
 .dashboard_container {
-  padding-left: 5%;
-  padding-right: 5%;
   padding-bottom: 5%;
   padding-top: 2%;
+  padding-left: 1%;
+  padding-right: 1%;
 }
 .header {
   display: flex;

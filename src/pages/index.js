@@ -32,9 +32,7 @@ function Login() {
       .then((result) => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
-        console.log(token);
         const user = result.user;
-        console.log(user);
         if (user) {
           if (users.allowedEmails.includes(user.email)) {
             router.push("/dashboard");
@@ -45,7 +43,10 @@ function Login() {
         }
       })
       .catch((error) => {
-        console.log(error);
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        const email = error.email;
+        const credential = GoogleAuthProvider.credentialFromError(error);
       });
   }
   useEffect(() => {

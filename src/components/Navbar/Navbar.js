@@ -7,13 +7,19 @@ import Menu from "@mui/material/Menu";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
+import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from "react";
 import { useRouter } from "next/router";
 import styles from "./Navbar.module.css";
+import NavbarDrawer from "../NavbarDrawer/NavbarDrawer";
 const settings = ["Logout"];
 
 function Navbar(props) {
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const handleDrawerOpen = () => {
+    setDrawerOpen(true);
+  }
   const router = useRouter();
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -27,8 +33,19 @@ function Navbar(props) {
     });
   }
   return (
+    <>
     <AppBar position="static">
       <Toolbar disableGutters className={styles.toolbar}>
+      <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            sx={{ mr: 2 }}
+            onClick={handleDrawerOpen}
+          >
+            <MenuIcon />
+          </IconButton>
         <Typography
           variant="h6"
           noWrap
@@ -79,6 +96,8 @@ function Navbar(props) {
         </Box>
       </Toolbar>
     </AppBar>
+    <NavbarDrawer setDrawerOpen = {setDrawerOpen} drawerOpen = {drawerOpen} />
+    </>
   );
 }
 export default Navbar;
